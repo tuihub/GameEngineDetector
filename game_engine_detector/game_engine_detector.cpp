@@ -14,25 +14,16 @@ typedef void (*FREE_FUNC)(const char*);
 
 int main(int argc, wchar_t* argv[])
 {
-	wchar_t* dllPath;
-	if (argc != 3 && argc != 4)
+	HMODULE dll;
+	if (argc != 3)
 	{
-		wcout << "Usage: game_engine_detector <path_to_exe> <path_to_base_dir> (<path_to_dll>)" << endl;
+		wcout << "Usage: game_engine_detector <path_to_exe> <path_to_base_dir>" << endl;
 		return -1;
 	}
-	if (argc == 4)
-	{
-		dllPath = argv[3];
-	}
-	else
-	{
-		wchar_t t[] = L"lib_game_engine_detector.dll";
-		dllPath = t;
-	}
-	HMODULE dll = LoadLibrary(dllPath);
+	dll = LoadLibrary(L"lib_game_engine_detector.dll");
 	if (dll == NULL)
 	{
-		wcout << "Failed to load " << dllPath << endl;
+		wcout << "Failed to load " << "lib_game_engine_detector.dll" << endl;
 		return -1;
 	}
 	DETECT_FUNC Detect = (DETECT_FUNC)GetProcAddress(dll, "Detect");

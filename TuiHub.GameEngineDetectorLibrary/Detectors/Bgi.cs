@@ -10,7 +10,7 @@ namespace TuiHub.GameEngineDetectorLibrary.Detectors
 {
     public static partial class Detector
     {
-        public static bool IsBgi(string exePath, string? baseDir = null)
+        public static bool IsBgi(string exePath, string? baseDirPath = null)
         {
             var versionInfo = FileVersionInfo.GetVersionInfo(exePath);
             bool result = versionInfo.FileDescription == "Ethornell - BURIKO General Interpreter"
@@ -19,10 +19,10 @@ namespace TuiHub.GameEngineDetectorLibrary.Detectors
                 || versionInfo.OriginalFilename == "BGI.exe";
             if (!result)
             {
-                baseDir ??= Path.GetDirectoryName(exePath);
-                if (baseDir == null) { return false; }
+                baseDirPath ??= Path.GetDirectoryName(exePath);
+                if (baseDirPath == null) { return false; }
                 var matches = 0;
-                var files = Directory.EnumerateFiles(baseDir, "*.*", new EnumerationOptions
+                var files = Directory.EnumerateFiles(baseDirPath, "*.*", new EnumerationOptions
                 {
                     RecurseSubdirectories = true,
                     MaxRecursionDepth = 1
@@ -32,7 +32,7 @@ namespace TuiHub.GameEngineDetectorLibrary.Detectors
                 if (matches < 3)
                 {
                     Regex regex = new(@"^data[0-9]{3,5}\.arc$");
-                    matches += files.Where(f => (Path.GetDirectoryName(f) == baseDir || Path.GetFileName(baseDir) == "Archive")
+                    matches += files.Where(f => (Path.GetDirectoryName(f) == baseDirPath || Path.GetFileName(baseDirPath) == "Archive")
                         && regex.IsMatch(Path.GetFileName(f))).Count();
                 }
                 result = matches >= 3;

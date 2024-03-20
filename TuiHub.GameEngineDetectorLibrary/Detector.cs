@@ -8,10 +8,10 @@ namespace TuiHub.GameEngineDetectorLibrary
 {
     public static class Detector
     {
-        public static string Detect(string exePath, string? baseDir = null)
+        public static string Detect(string exePath, string? baseDirPath = null)
         {
             string result;
-            if (Detectors.Detector.IsBgi(exePath, baseDir))
+            if (Detectors.Detector.IsBgi(exePath, baseDirPath))
             {
                 result = "BGI";
             }

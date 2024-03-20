@@ -10,15 +10,15 @@ namespace TuiHub.GameEngineDetectorLibrary
     public static class NativeExports
     {
         [UnmanagedCallersOnly(EntryPoint = "detect")]
-        public static IntPtr Detect(IntPtr exePathPtr, IntPtr baseDirPtr)
+        public static IntPtr Detect(IntPtr exePathPtr, IntPtr baseDirPathPtr)
         {
             try
             {
                 var exePath = Marshal.PtrToStringAnsi(exePathPtr);
                 if (exePath == null) { throw new ArgumentNullException(exePath); }
-                var baseDir = baseDirPtr == IntPtr.Zero ? null : Marshal.PtrToStringAnsi(baseDirPtr);
+                var baseDirPath = baseDirPathPtr == IntPtr.Zero ? null : Marshal.PtrToStringAnsi(baseDirPathPtr);
 
-                string result = Detector.Detect(exePath, baseDir);
+                string result = Detector.Detect(exePath, baseDirPath);
 
                 return Marshal.StringToHGlobalAnsi(result);
             }

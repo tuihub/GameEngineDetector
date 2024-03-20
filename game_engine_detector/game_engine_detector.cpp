@@ -9,7 +9,8 @@ using std::cout;
 using std::wcout;
 using std::endl;
 
-typedef const wchar_t* (*DETECT_FUNC)(const wchar_t*, const wchar_t*);
+typedef const char* (*DETECT_FUNC)(const wchar_t*, const wchar_t*);
+typedef void (*FREE_FUNC)(const char*);
 
 int main(int argc, wchar_t* argv[])
 {
@@ -34,17 +35,24 @@ int main(int argc, wchar_t* argv[])
 		wcout << "Failed to load " << dllPath << endl;
 		return -1;
 	}
-	DETECT_FUNC detect = (DETECT_FUNC)GetProcAddress(dll, "detect");
-	if (detect == NULL)
+	DETECT_FUNC Detect = (DETECT_FUNC)GetProcAddress(dll, "Detect");
+	if (Detect == NULL)
 	{
-		wcout << "Failed to get detect function 'detect'" << endl;
+		wcout << "Failed to get detect function 'Detect'" << endl;
+		return -1;
+	}
+	FREE_FUNC FreeString = (FREE_FUNC)GetProcAddress(dll, "FreeString");
+	if (FreeString == NULL)
+	{
+		wcout << "Failed to get free function 'FreeString'" << endl;
 		return -1;
 	}
 
-	const wchar_t* result = detect(argv[1], argv[2]);
-	wcout << result << endl;
+	const char* result = Detect(argv[1], argv[2]);
 
-	delete[] result;
+	cout << result << endl;
+
+	FreeString(result);
 	FreeLibrary(dll);
 
 	return 0;

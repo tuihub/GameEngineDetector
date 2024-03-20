@@ -9,7 +9,7 @@ namespace TuiHub.GameEngineDetectorLibrary
 {
     public static class NativeExports
     {
-        [UnmanagedCallersOnly(EntryPoint = "detect")]
+        [UnmanagedCallersOnly(EntryPoint = "Detect")]
         public static IntPtr Detect(IntPtr exePathPtr, IntPtr baseDirPathPtr)
         {
             try
@@ -26,6 +26,12 @@ namespace TuiHub.GameEngineDetectorLibrary
             {
                 return Marshal.StringToHGlobalAnsi($"Error: {ex}");
             }
+        }
+
+        [UnmanagedCallersOnly(EntryPoint = "FreeString")]
+        public static void FreeString(IntPtr str)
+        {
+            Marshal.FreeHGlobal(str);
         }
     }
 }
